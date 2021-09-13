@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { MessageItem } from "./MessageItem";
+import { useState } from 'react';
+import { MessageItem } from "./components/message/MessageItem";
 import { useEffect } from 'react';
 import generateMessage, { Message } from './Api';
 import GlobalStyles from "./styled-components/GlobalStyles";
-import { cleanup } from '@testing-library/react';
+import { Snackbar } from "./components/snackbar/Snackbar";
+import { Button } from '@material-ui/core';
 
 export const MessageList = () => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -17,11 +18,20 @@ export const MessageList = () => {
 
   const renderToggleButton = () => {
     return (
-      <button>
-      </button>
+      <Button
+      type="button"
+      color="secondary"
+      variant="contained">Start</Button>
     )
   }
 
+  const renderSnackBar = () => {
+    const errors = messages.filter(i => i.priority === 0);
+    return (
+      <Snackbar message={errors[errors.length - 1]}/>
+    )
+  }
+  
   const renderMessageType = (type: string, priority: Number) => {
     const messageType = messages.filter(i => i.priority === priority);
     return (
@@ -45,12 +55,14 @@ export const MessageList = () => {
   return (
     <div className={"app"}>
       <GlobalStyles />
+      { renderSnackBar() }
       <div className={"buttons-container"}>
-      { renderToggleButton() }
-      <input
-        type="button"
-        onClick={() => { setMessages([]) }}
-        value="Clear" />
+        { renderToggleButton() }
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => { setMessages([]) }}
+        >Clear</Button>
       </div>
       <div className="messages-container">
         <div className="errors">

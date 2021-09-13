@@ -1,5 +1,3 @@
-import React from 'react'
-
 export const MessageItem = ({type, message}: {type: Number, message: string}) => {
   return (
     <div className={ `item item${type}` }>
